@@ -82,7 +82,7 @@ with open("harmful_behaviors_jailbreakbench.csv") as file:
 
 jb_dict = vars(args)
 jb_dict["jb_artifacts"] = []
-timestamp_start = datetime.datetime.now()
+timestamp_start = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 for i_request, request in enumerate(requests[:args.n_requests]):
     print(f">>> Request #{i_request}: {request}")
     for i_restart in range(args.n_restarts):
@@ -116,7 +116,9 @@ for i_request, request in enumerate(requests[:args.n_requests]):
         "jailbroken_rules": jailbroken_rules, 
     }
     jb_dict["jb_artifacts"].append(jb_artifact)
-
+    
+    os.makedirs('jailbreak_artifacts', exist_ok=True)
+    
     jb_file = f'jailbreak_artifacts/{timestamp_start}-model={args.target_model}-n_requests={args.n_requests}-n_restarts={args.n_restarts}.json'
     with open(jb_file, 'w') as f:
         json.dump(jb_dict, f, indent=4)
